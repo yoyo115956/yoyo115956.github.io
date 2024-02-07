@@ -8,6 +8,9 @@ keyword: "黄玄, Hux黄玄, Hux, 鬼栈, huxpro, @huxpro, 黄玄的博客, Hux 
 url: "" # your host, for absolute URL
 baseurl: "" # for example, '/blog' if your blog hosted on 'host/blog'
 
+words_per_minute         : 450
+
+
 # Publish posts or collection documents with a future date.
 future: true
 

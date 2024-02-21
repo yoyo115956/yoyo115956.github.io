@@ -318,3 +318,196 @@ module top_module (
 endmodule
 
 ```
+
+### 2.5 More Verilog Features
+
+#### 2.5.1 Conditional temary operator
+
+问题描述
+
+>  
+ 给定四个无符号数，求最小值。无符号数可以与标准比较运算符（a < b）进行比较。使用条件运算符制作两路最小电路，然后将其中的一些组成一个四路最小电路。您可能需要一些线向量作为中间结果。  
+
+
+verilog代码
+
+```verilog
+module top_module (
+    input [7:0] a, b, c, d,
+    output [7:0] min);
+    wire [7:0] minab;
+    wire [7:0] mincd;
+    assign minab = (a<b)?a:b;
+    assign mincd = (c<d)?c:d;
+    assign min = (minab<mincd)?minab:mincd;
+endmodule
+
+```
+
+#### 2.5.2 Reduction operators
+
+问题描述
+
+>  
+ 您已经熟悉两个值之间的按位运算，例如a  &  b或a ^ b。有时，您想创建一个对一个向量的所有位进行操作的宽门，例如(a[0]  &  a[1]  &  a[2]  &  a[3] ... )，如果向量很长。 
+ 归约运算符可以对向量的位进行 AND、OR 和 XOR，产生一位输出： 
+  &  a[3:0] // 与：a[3] & a[2] & a[1] & a[0]。相当于 (a[3:0] == 4'hf) | b[3:0] // 或：b[3]|b[2]|b[1]|b[0]。相当于 (b[3:0] != 4'h0) ^ c[2:0] // 异或：c[2]^c[1]^c[0] 这些是只有一个操作数的一元运算符（类似于 NOT 运算符 ! 和 ~）。您还可以反转这些输出以创建 NAND、NOR 和 XNOR 门，例如(~ &  d[7:0])。 
+ 练习：当通过不完善的通道传输数据时，奇偶校验通常用作检测错误的简单方法。创建一个电路，计算 8 位字节的奇偶校验位（这将向字节添加第 9 位）。我们将使用“偶数”奇偶校验，其中奇偶校验位只是所有 8 个数据位的 XOR。 
+
+
+verilog代码
+
+```verilog
+module top_module (
+    input [7:0] in,
+    output parity); 
+    assign parity= ^ in[7:0];
+endmodule
+```
+
+#### 2.5.3 Reduction : Even wider gates
+
+问题描述
+
+>  
+ 在 [99:0] 中构建一个具有 100 个输入的组合电路。 
+ 有3个输出： 
+ - out_and：100 输入与门的输出。
+ - out_or：100 输入或门的输出。
+ - out_xor：100 输入异或门的输出。 
+
+
+veriog代码
+
+```verilog
+module top_module( 
+    input [99:0] in,
+    output out_and,
+    output out_or,
+    output out_xor 
+);
+    assign out_and =  & in[99:0];
+    assign out_or = |in[99:0];
+    assign out_xor = ^in[99:0];
+endmodule
+```
+
+#### 2.5.4 Combinational for-loop: Vector reversal 2
+
+问题描述
+
+>  
+ 给定一个 100 位输入向量 [99:0]，反转其位顺序。 
+ for 循环（在组合的 always 块或 generate 块中）在这里很有用。在这种情况下，我更喜欢组合的 always 块，因为不需要模块实例化（需要生成块）。 
+
+
+Verilog代码 
+
+```verilog
+module top_module( 
+    input [99:0] in,
+    output [99:0] out
+);
+    integer i;
+    always @(*)begin
+        for(i=0;i<100;i=i+1)begin
+            out[i]=in[99-i];  
+        end
+    end
+endmodule
+```
+
+#### 2.5.5 Combinational for-loop: 255-bit population count
+
+问题描述
+
+>  
+ “人口计数”电路计算输入向量中“1”的数量。为 255 位输入向量构建人口计数电路。 
+ 这么多东西要添加... for循环怎么样？ 
+
+
+verilog代码
+
+```verilog
+module top_module( 
+    input [254:0] in,
+    output [7:0] out );
+	integer i;
+    always @(*)begin
+        out = 8'd0;
+        for(i=0;i<255;i=i+1) 
+            out=in[i]?out+8'd1:out;
+    end
+endmodule
+```
+
+#### 2.5.6 Generate for-loop:100-bit binary adder 2
+
+问题描述
+
+>  
+ 练习：通过实例化100个全加器来创建一个 100 位二进制波纹进位加法器。加法器将两个 100 位数字和一个进位相加，产生一个 100 位和并执行。为了鼓励您实际实例化全加器，还要输出纹波进位加法器中每个全加器的进位。cout[99] 是最后一个全加器的最终进位，也是您通常看到的进位。 
+ 有许多全加器要实例化。实例数组或生成语句将在这里有所帮助 
+
+
+ verilog代码
+
+```verilog
+
+module top_module( 
+    input [99:0] a, b,
+    input cin,
+    output [99:0] cout,
+    output [99:0] sum );
+    genvar i;
+    generate
+        for(i=0;i<100;i++) begin:adder
+            if(i==0)
+                assign {cout[0],sum[0]} = a[0]+b[0]+cin;
+            else
+                assign {cout[i],sum[i]} = a[i]+b[i]+cout[i-1];
+        end           
+    endgenerate
+endmodule
+
+```
+
+#### 2.5.7  Generate for-loop:100-digit BCD adder
+
+问题描述
+
+>  为您提供了一个名为 bcd_fadd 的 BCD 一位数加法器，它将两个 BCD 位数相加并带入，然后产生一个和并带出。
+>
+>  ```verilog
+>  module bcd_fadd (
+>      input [3:0] a,
+>      input [3:0] b,
+>      input     cin,
+>      output   cout,
+>      output [3:0] sum );
+>  ```
+>
+>  实例化 100 份 bcd_fadd，创建一个 100 位 BCD 波纹载波加法器。您的加法器应将两个 100 位 BCD 数（打包成 400 位向量）相加，再加上一个进位，生成一个 100 位数的和，然后输出。 
+
+
+ verilog代码
+
+```verilog
+module top_module( 
+    input [399:0] a, b,
+    input cin,
+    output cout,
+    output [399:0] sum );
+    wire [99:0] cout_temp;
+    genvar i;
+    generate
+        for(i=0;i<100;i++) begin:bcd_fadd
+            if(i == 0)
+                bcd_fadd bcd_inst(a[3:0],b[3:0],cin,cout_temp[0],sum[3:0]);
+            else
+                bcd_fadd bcd_inst(a[4*i+3:4*i],b[4*i+3:4*i],cout_temp[i-1],cout_temp[i],sum[4*i+3:4*i]);
+        end
+        assign cout = cout_temp[99];
+    endgenerate
+endmodule
+```

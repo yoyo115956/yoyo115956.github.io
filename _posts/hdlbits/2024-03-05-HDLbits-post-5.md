@@ -372,3 +372,181 @@ module top_module (
         .sum(sum[15:12]));
 endmodule
 ```
+
+#### 3.1.4 Karnaugh Map to Circuit
+
+#### 3.1.4.1 3-variable 
+
+问题描述
+
+>  
+ 实现下面卡诺图描述的电路，在编码之前尝试简化 k-map。 尝试和积和积和形式。 我们无法检查您是否有 k-map 的最佳简化。 但是我们可以检查你的归约是否等价，我们可以检查你是否可以将 k-map 转换为电路。 
+
+
+
+<img alt="" height="241" src="https://s2.loli.net/2024/02/21/eorKRNIMP8ClWmp.png" width="176">
+
+verilog代码
+
+```verilog
+module top_module(
+    input a,
+    input b,
+    input c,
+    output out  ); 
+    assign out = a|b|c;
+endmodule
+```
+
+#### 3.1.4.2 4-variable
+
+问题描述 
+
+>  
+ 实现下面卡诺图描述的电路。  
+
+<img alt="" height="238" src="https://s2.loli.net/2024/02/21/QFVitzjfkWAG4v1.png" width="262">
+
+verilog代码
+
+```verilog
+module top_module(
+    input a,
+    input b,
+    input c,
+    input d,
+    output out  ); 
+    assign out = (~b & ~c)|(~a & ~d)|(b & c & d)|(a & c & d);
+endmodule
+```
+
+#### 3.1.4.3 4-variable
+
+问题描述
+
+>  
+ 实现下面卡诺图描述的电路。  
+
+<img alt="" height="203" src="https://s2.loli.net/2024/02/21/uWd81iExSjh9NkX.png" width="210">
+
+verilog代码
+
+```verilog
+module top_module(
+    input a,
+    input b,
+    input c,
+    input d,
+    output out  ); 
+    assign out = (~b & c)|a;
+endmodule
+```
+
+#### 3.1.4.4 4-variable
+
+>  
+  实现下面卡诺图描述的电路。 
+
+<img alt="" height="195" src="https://s2.loli.net/2024/02/21/chQj6DJz8rpYUZu.png" width="200">
+
+verilog代码 
+
+```verilog
+module top_module(
+    input a,
+    input b,
+    input c,
+    input d,
+    output out  ); 
+    assign out = (~a & ~b & ~c & d)|(~a & b & ~c & ~d)|(a & b & ~c & d)|(a & ~b & ~c & ~d)|(~a & b & c & d)|(a & ~b & c & d)|(~a & ~b & c & ~d)|(a & b & c & ~d);
+endmodule
+```
+
+#### 3.1.4.5 Minimum SOP and POS
+
+问题描述
+
+>   具有四个输入（a、b、c、d）的单输出数字系统在输入上出现 2、7 或 15 时生成逻辑 1，当输入上出现 0、1、4、5、6 、9、10、13 或 14 出现时生成逻辑 0。数字 3、8、11 和 12 的输入条件在此系统中永远不会出现。例如，7 对应于 a、b、c、d 分别设置为 0、1、1、1。 
+ 确定最小SOP形式(积之和 最小项)的输出out_sop，以及最小POS形式(和之积 最大项)的输出out_pos。 
+
+
+verilog代码
+
+```verilog
+module top_module (
+    input a,
+    input b,
+    input c,
+    input d,
+    output out_sop,
+    output out_pos
+); 
+    assign out_sop = (~a & ~b & c)|(c & d);
+    assign out_pos = c & (~b|d) & (~a|d);
+endmodule
+
+```
+
+#### 3.1.4.6 Karnaugh map
+
+问题描述
+
+>  
+ 考虑下面卡诺图中所示 的函数**f ，**实现这个功能。**d**是不关心，这意味着您可以选择输出任何方便的值。 
+
+<img alt="" src="https://img-blog.csdnimg.cn/2147bad92c474cea8b84b8e09b65e5f4.png">
+
+verilog代码
+
+```verilog
+module top_module (
+    input [4:1] x, 
+    output f );
+    assign f = (~x[1] & x[3])|(x[2] & x[4]);
+endmodule
+
+```
+
+#### 3.1.4.7 Karnaugh map
+
+问题描述
+
+>  
+ 考虑下面卡诺图中所示的函数**f，**实现这个功能。（原始考试问题要求简化 SOP 和 POS 形式的函数）注意卡诺图中 x[4:1] 输入位的顺序。 
+
+<img alt="" height="156" src="https://s2.loli.net/2024/02/21/XOf1JokNRQGzbiW.png" width="191">
+
+verilog代码 
+
+```verilog
+module top_module (
+    input [4:1] x,
+    output f
+); 
+    assign f = (~x[1] & x[3])|(x[2] & x[3] & x[4])|(~x[2] & ~x[4]);
+endmodule
+```
+
+#### 3.1.4.8 K-map implemented with a multiplexer
+
+问题描述 
+
+>  
+ 对于下面的卡诺图，给出使用一个 4 对 1 多路复用器和尽可能多的 2 对 1 多路复用器的电路实现，但使用尽可能少。不允许使用任何其他逻辑门，并且必须使用a和b作为多路复用器选择器输入，如下面的 4 对 1 多路复用器所示。您只实现了标记为top_module的部分，以便整个电路（包括 4 对 1 多路复用器）实现 K-map。 
+
+<img alt="" height="264" src="https://s2.loli.net/2024/02/21/tfn1ZcwvE2kzDme.png" width="283">
+
+ verilog代码
+
+```verilog
+module top_module (
+    input c,
+    input d,
+    output [3:0] mux_in
+); 
+    assign mux_in[0] = c|d;
+    assign mux_in[1] = 0;
+    assign mux_in[2] = ~d;
+    assign mux_in[3] = c & d;
+endmodule
+```

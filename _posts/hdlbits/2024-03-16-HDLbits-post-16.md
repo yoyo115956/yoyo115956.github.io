@@ -119,7 +119,7 @@ The counter increments (up to a maximum of 3) when train_valid = 1 and train_tak
 
 areset is an asynchronous reset that resets the counter to weakly not-taken (2’b01). Output state[1:0] is the two-bit counter value.
 
-一开始没看懂题。 这是一个二位饱和计数器形式的分支预测器，这种方法的优点是，该条件分支指令必须连续选择某条分支两次，才能从强状态翻转，从而改变了预测的分支。 实现它有用FSM的方法和counter的方法。 其实从题目意图来看，这个FSM（SNT,WNT,WT,ST）状态转移有规律可循，可以用更简单地实现。当{train_valid,train_taken}=2’b11，taken可能性增强，相当于state+1计数，当{train_valid,train_taken}=2’b10，taken可能性减弱，相当于state-1计数，当train_valid=0，state保持其值。 <img src="https://img-blog.csdnimg.cn/b2137c372f834ce4af11fb7b68a70da7.jpeg" alt="在这里插入图片描述">
+一开始没看懂题。 这是一个二位饱和计数器形式的分支预测器，这种方法的优点是，该条件分支指令必须连续选择某条分支两次，才能从强状态翻转，从而改变了预测的分支。 实现它有用FSM的方法和counter的方法。 其实从题目意图来看，这个FSM（SNT,WNT,WT,ST）状态转移有规律可循，可以用更简单地实现。当{train_valid,train_taken}=2’b11，taken可能性增强，相当于state+1计数，当{train_valid,train_taken}=2’b10，taken可能性减弱，相当于state-1计数，当train_valid=0，state保持其值。 <img src="https://s2.loli.net/2024/02/27/klKZnaj38WbgudQ.jpg" alt="在这里插入图片描述">
 
 ## III . (Cs450/history shift)
 

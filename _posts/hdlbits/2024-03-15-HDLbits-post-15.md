@@ -9,9 +9,6 @@ tags:
   - HDLbits
 ---
 
-
-# HDLBits 系列（40）如何写 TestBench 文件？
-
 ### 序言
 
 由于入门的测试文件很简单，所以一直以来也都是直接给出测试文件，直到今天才想着去总结一个测试文件的写法。这篇博客将根据HDLBits的题目来总结如何书写Testbench文件，肯定有不完善的地方，仅仅作为一次总结吧。 TestBench文件，又称为TB文件，是用来对设计文件进行测试的程序，它与设计文件不同的地方在于，它使用的语法可以是不可综合的，比较灵活，不仅仅可以使用Verilog来写Tb文件，还可以使用其他语言，例如sv等。 写好一个基本的测试文件比较简单，但是写好一个比较完善的测试文件还是比较具有挑战性的。 **Tb文件包括那些组件呢？**
@@ -59,6 +56,7 @@ endmodule
 
 对于时钟的设计，我们有两种写法，都是通过循环的方式来实现。
 - forever- always 第一种方式，也是我比较喜欢的方式，使用forever进行时钟的设计： 还是以上一个例子为例，待测试模块为dff：
+
 ```verilog
 module test_dff();
 // input define
@@ -224,7 +222,7 @@ endmodule
 
 ### 实战演练
 
- The waveform below sets clk, in, and s: <img src="https://img-blog.csdnimg.cn/20191213180429208.png" alt="在这里插入图片描述"> Module q7 has the following declaration:
+ The waveform below sets clk, in, and s: <img src="https://s2.loli.net/2024/02/27/j8rQw431BU6YoCs.png" alt="在这里插入图片描述"> Module q7 has the following declaration:
 
 ```verilog
 module q7 (
@@ -322,5 +320,3 @@ endmodule
 ```
 
 这篇博文就到这里吧，这是最基础，最简单的测试文件的写法，当然，基础很重要，在此基础上，才能够在上一层楼。
-
-https://blog.csdn.net/weixin_48052679/article/details/126520356

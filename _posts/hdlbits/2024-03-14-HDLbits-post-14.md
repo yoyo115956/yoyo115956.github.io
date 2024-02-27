@@ -230,7 +230,7 @@ endmodule
  这是一个组合电路。阅读仿真波形以确定电路的作用，然后实现它。 
 
 
-<img alt="" height="143" src="https://img-blog.csdnimg.cn/d85fb4221b03499b9d4093b9b8c388d6.png" width="501">
+<img alt="" height="143" src="https://s2.loli.net/2024/02/27/buHdzn1BToMh2Wt.png" width="501">
 
 verilog代码 
 

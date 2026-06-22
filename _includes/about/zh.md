@@ -1,57 +1,32 @@
-Hey，我是黄玄（a.k.a. Hux, _@huxpro_），一个略懂计算机科学与艺术的斜杆不动青年，自诩是一个[广院](https://baike.baidu.com/item/%E4%B8%AD%E5%9B%BD%E4%BC%A0%E5%AA%92%E5%A4%A7%E5%AD%A6)数字媒体艺术系与 RIT 计算机科学系（师从 [Prof. Matthew Fluet](https://www.cs.rit.edu/~mtf/) 专攻编程语言）杂交出来的[黑客与画家](https://book.douban.com/subject/6021440/)。
+﻿嘿，我是**李泳霆**，一个深耕计算机体系结构领域的工科生，也是个喜欢把日子过得明明白白的普通人。
 
-现为 <del>Facebook</del> Meta 签约软件工程师，就职于开源技术<del>网红</del>团队 [React](https://beta.reactjs.org/community/meet-the-team#react-core)，曾参与 [Hermes JavaScript 引擎](https://hermesengine.dev/)，[ReasonML](https://reasonml.github.io/) (现 [ReScript](https://rescript-lang.org/))，以及 [Reality Labs](https://tech.fb.com/ar-vr/) 某保密项目等。在国内期间，曾被招募为阿里巴巴 · [阿里旅行（飞猪）](http://alitrip.com)· 前端工程师、微影时代 · 微票儿 · 前端基础设施工程团队负责人、[饿了么](https://ele.me/) · 大前端团队 · [PWA 顾问](https://medium.com/elemefe/upgrading-ele-me-to-progressive-web-app-2a446832e509) 等。
+本科阶段学的是软件工程，主攻互联网前端开发。硕士入读清华大学后，在导师的引荐下参与校企合作项目，正式踏入芯片设计与验证领域，完成了一次不算轻松却很值得的跨方向转型。在校期间系统学习软硬件底层知识，熟练掌握 **RISC-V** 指令集架构、**gem5** 微架构仿真平台、**UVM** 验证方法学等工具链，具备扎实的硬件研发与仿真能力。
 
+目前专注于**容错设计**相关研究，参与学术论文撰写与会议投稿工作，熟悉学术论文排版与发表全流程。先后参与过**处理器**、**运算 IP 核**以及**片上网络（NoC）架构**等实习项目，积累了不少一线实操心得。
 
-目前的物理活动范围主要在美帝纽约与硅谷，也想当个数字游<del>民</del>侠。虚拟分身日常出没于[微博](https://weibo.com/huxpro)、[知乎](https://www.zhihu.com/people/huxpro/pins/posts)、[B站](https://space.bilibili.com/43271611)、[Instagram](https://www.instagram.com/huxpro/)、[推特](https://twitter.com/Huxpro/)、[Github](https://github.com/huxpro) 等。
+即将入职[海光信息](https://www.hygon.cn/)，从事芯片验证相关工作，预计 2025 年 7 月初正式到岗。做事严谨踏实，擅长拆解技术问题，乐于交流探讨，欢迎一起学习进步。
 
+日常出没于 [Github](https://github.com/yoyo115956) 等地。
 
-##### 技术演讲
+---
 
-- [React 国情咨文 2022][13] · 第七届中国开源年会 · 2023
-- [React Labs: What We've Been Working On – June 2022][12] · React Blog
-- [React Without Memo][11] · [React Conf 2021](https://conf.reactjs.org/)
-- [Toward Hermes being the Default][11] · React Native Blog · 2021
-- React Native 0.64 with Hermes for iOS · [The RN Show Podcast Ep #5](https://www.callstack.com/podcast-react-native-show) · 2021
-- [Upgrading to Progressive Web Apps][9] · [Youtube](https://www.youtube.com/watch?v=RWzMF-1fjJ8&t=1s) · [JSConf CN 上海 2017](http://2017.jsconf.cn/)
-- Building Progressive Web Apps · [CSDI 广州 2017](http://www.csdisummit.com/)
-- The State of Progressive Web App · GDG IO Redux 北京 2017
-- 炒冷饭 · PWA 到底是个什么玩意？· Baidu HQ 北京 2017
-- [Service Worker 101][5] · GDG DevFest 北京 2016
-- [Progressive Web App，复兴序章][4] · [QCon 上海 2016](http://2016.qconshanghai.com/presentation/3111)
-- Progressive Web App 之我见 · GDG IO Redux 北京 2016
-- [CSS Still Sucks 2015][2] · 2015
-- [JavaScript 模块化七日谈][1] · 2015
+##### 实习经历
 
+- **芯片验证实习生** · 处理器设计方向 · 功能仿真与调试
+- **运算 IP 核验证** · 数字逻辑验证、覆盖率分析
+- **片上网络（NoC）架构研究** · 性能建模与仿真
+- **前端开发工程师（转型前）** · Web 应用开发、工程化实践
 
-##### 媒体关注
+##### 研究方向
 
-- [Hux 黄玄：从全局视角看 React 生态][14] · 直播 · 图灵 8 点半 · 2023
-- [2022 中国开源先锋 33 人][18] · SegmentFault · 2023
-- [React 黄玄：不懂艺术的 B-Boy 不是 Swag 的程序员][16] · Gitee 封面人物 · 2022
-- [在硅谷当程序员是怎样的体验？][17] · 知乎[《我所向往的职业啊》](https://movie.douban.com/subject/36015036/) · 2022
+- 计算机体系结构 · 容错设计
+- 微架构仿真（gem5）
+- 硬件功能验证（SystemVerilog + UVM）
+- 学术论文撰写与发表
 
-<!--
-- [掘金 AMA：我是前端娱乐圈的老人 & Facebook 实习生 -- 黄玄][19] · 2018
--->
+##### 掌握的技术栈
 
-
-[1]: //huangxuan.me/2015/07/09/js-module-7day/
-[2]: //huangxuan.me/2015/12/28/css-sucks-2015/
-[3]: //huangxuan.me/2016/06/05/pwa-in-my-pov/
-[4]: //huangxuan.me/2016/10/20/pwa-qcon2016/
-[5]: //huangxuan.me/2016/11/20/sw-101-gdgdf/
-[6]: https://yanshuo.io/assets/player/?deck=58ac8598b123db0067292f92 "PWA Rehashing"
-[7]: https://yanshuo.io/assets/player/?deck=593ad6fbfe88c2006a0a0d6d "The State of PWA"
-[8]: https://yanshuo.io/assets/player/?deck=594d673d570c357d0698a950 "Building PWA"
-[9]: //huangxuan.me/jsconfcn2017/
-[10]: https://reactnative.dev/blog/2021/10/26/toward-hermes-being-the-default
-[11]: https://youtu.be/lGEMwh32soc
-[12]: https://reactjs.org/blog/2022/06/15/react-labs-what-we-have-been-working-on-june-2022.html
-[13]: https://www.bilibili.com/video/BV1LY411Q7hC/?spm_id_from=333.999.0.0
-[14]: https://appycyfaqcq1951.pc.xiaoe-tech.com/p/t_pc/course_pc_detail/video/v_64477dbfe4b0cf39e6c11d2a
-[15]: https://segmentfault.com/a/1190000043208486
-[16]: https://gitee.com/gitee-stars/30
-[17]: https://www.zhihu.com/zvideo/1542577108190068737?page=ogv
-[18]: https://segmentfault.com/a/1190000043208486
-[19]: https://juejin.cn/post/6844903750155419655
+- **硬件方向**：RISC-V、SystemVerilog、UVM、gem5、数字电路
+- **编程语言**：C/C++、Python、JavaScript
+- **工具链**：Linux、Git、LaTeX（论文排版）
+- **前端（转型前）**：HTML/CSS、React、前端工程化

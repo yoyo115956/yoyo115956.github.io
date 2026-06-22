@@ -1,63 +1,63 @@
-[Hux Blog](https://huangxuan.me)
+﻿# LiYongTing Blog
 ================================
 
-> I never expect this becomes popular.
+> 没想到这个博客模板会这么受欢迎。
 
 ![](http://huangxuan.me/img/blog-desktop.jpg)
 
 
-[User Manual 👉](_doc/Manual.md)
+[使用手册 👉](_doc/Manual.md)
 --------------------------------------------------
 
-### Getting Started
+### 快速开始
 
-1. You will need [Ruby](https://www.ruby-lang.org/en/) and [Bundler](https://bundler.io/) to use [Jekyll](https://jekyllrb.com/). Following [Using Jekyll with Bundler](https://jekyllrb.com/tutorials/using-jekyll-with-bundler/) to fullfill the enviromental requirement.
+1. 你需要安装 [Ruby](https://www.ruby-lang.org/zh_cn/) 和 [Bundler](https://bundler.io/) 来使用 [Jekyll](https://jekyllrb.com/)。请参考 [Using Jekyll with Bundler](https://jekyllrb.com/tutorials/using-jekyll-with-bundler/) 完成环境配置。
 
-2. Installed dependencies in the `Gemfile`:
+2. 安装 `Gemfile` 中的依赖：
 
-```sh
-$ bundle install 
-```
+`sh
+$ bundle install
+`
 
-3. Serve the website (`localhost:4000` by default):
+3. 启动本地服务器（默认地址为 `localhost:4000`）：
 
-```sh
-$ bundle exec jekyll serve  # alternatively, npm start
-```
+`sh
+$ bundle exec jekyll serve  # 或者使用 npm start
+`
 
-### Development (Build From Source)
+### 开发（从源码构建）
 
-To modify the theme, you will need [Grunt](https://gruntjs.com/). There are numbers of tasks you can find in the `Gruntfile.js`, includes minifing JavaScript, compiling `.less` to `.css`, adding banners to keep the Apache 2.0 license intact, watching for changes, etc. 
+如需修改主题样式，你需要安装 [Grunt](https://gruntjs.com/)。`Gruntfile.js` 中定义了多个任务，包括压缩 JavaScript、将 `.less` 编译为 `.css`、添加 Apache 2.0 许可证声明、监听文件变化等。
 
-Yes, they were inherited and are extremely old-fashioned. There is no modularization and transpilation, etc.
+这些构建流程较为老旧，没有模块化和转译等现代化配置，但功能完整。
 
-Critical Jekyll-related code are located in `_include/` and `_layouts/`. Most of them are [Liquid](https://github.com/Shopify/liquid/wiki) templates.
+Jekyll 相关的核心代码位于 `_includes/` 和 `_layouts/` 目录下，大多数为 [Liquid](https://github.com/Shopify/liquid/wiki) 模板。
 
-This theme uses the default code syntax highlighter of jekyll, [Rouge](http://rouge.jneen.net/), which is compatible with Pygments theme so just pick any pygments theme css (e.g. from [here](http://jwarby.github.io/jekyll-pygments-themes/languages/javascript.html) and replace the content of `highlight.less`.
-
-
-### Interesting to know more? Checkout the [full user manual](_doc/Manual.md)!
+本主题使用 Jekyll 默认的代码高亮器 [Rouge](http://rouge.jneen.net/)，与 Pygments 主题兼容，可从 [这里](http://jwarby.github.io/jekyll-pygments-themes/languages/javascript.html) 选择一个 Pygments 主题 CSS，替换 `highlight.less` 的内容即可。
 
 
-Other Resources
+### 想了解更多？查阅[完整使用手册](_doc/Manual.md)！
+
+
+其他资源
 ---------------
 
-Ports
+移植版本
 - [**Hexo**](https://github.com/Kaijun/hexo-theme-huxblog) by @kaijun
 - [**React-SSR**](https://github.com/LucasIcarus/huxpro.github.io/tree/ssr) by @LucasIcarus
 
-[Starter/Boilerplate](https://github.com/huxpro/huxblog-boilerplate)
-- Out of date. Helps wanted for updating it on par with the main repo
+[起始模板 / Boilerplate](https://github.com/huxpro/huxblog-boilerplate)
+- 已有些过时，欢迎贡献代码使其与主仓库保持同步。
 
-Translation
+文档翻译
 - [🇨🇳  中文文档（有点过时）](https://github.com/Huxpro/huxpro.github.io/blob/master/_doc/README.zh.md)
 
 
-License
+许可证
 -------
 
-Apache License 2.0.
+Apache License 2.0  
 Copyright (c) 2015-present Huxpro
 
-Hux Blog is derived from [Clean Blog Jekyll Theme (MIT License)](https://github.com/BlackrockDigital/startbootstrap-clean-blog-jekyll/)
+本博客主题基于 [Clean Blog Jekyll Theme（MIT 许可证）](https://github.com/BlackrockDigital/startbootstrap-clean-blog-jekyll/) 修改开发  
 Copyright (c) 2013-2016 Blackrock Digital LLC.

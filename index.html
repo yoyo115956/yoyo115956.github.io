@@ -3,44 +3,183 @@ layout: page
 description: "「离开世界之前 一切都是过程」"
 ---
 
-{% for post in paginator.posts %}
-<div class="post-preview">
-    <a href="{{ post.url | prepend: site.baseurl }}">
-        <h2 class="post-title">
-            {{ post.title }}
-        </h2>
-        {% if post.subtitle %}
-        <h3 class="post-subtitle">
-            {{ post.subtitle }}
-        </h3>
-        {% endif %}
-        <div class="post-content-preview">
-            {% if post.lang == 'en' %}
-                {{ post.content | strip_html | truncate:300 }}
-            {% else %}
-                {{ post.content | strip_html | truncate:200 }}
-            {% endif %}
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %} on {{ post.date | date: "%B %-d, %Y" }}
-    </p>
-</div>
-<hr>
-{% endfor %}
+<style>
+/* ===== Homepage Card Grid ===== */
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 8px 0 28px;
+}
+@media (max-width: 991px) {
+  .card-grid { grid-template-columns: 1fr; }
+}
 
-<!-- Pager -->
+.post-card {
+  position: relative;
+  border: 1px solid #efefef;
+  border-radius: 8px;
+  padding: 16px 16px 14px 20px;
+  background: #fff;
+  overflow: hidden;
+  transition: box-shadow .18s, transform .18s;
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
+.post-card:hover {
+  box-shadow: 0 4px 18px rgba(0,0,0,.08);
+  transform: translateY(-2px);
+  text-decoration: none;
+  color: inherit;
+}
+/* Left color bar — color set per category */
+.post-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  border-radius: 8px 0 0 8px;
+}
+.post-card.bar-verification::before { background: #1578a0; }
+.post-card.bar-arch::before         { background: #b06018; }
+.post-card.bar-riscv::before        { background: #8818b0; }
+.post-card.bar-gem5::before         { background: #4418b0; }
+.post-card.bar-dl::before           { background: #1aa030; }
+.post-card.bar-hdlbits::before      { background: #b01818; }
+.post-card.bar-algo::before         { background: #184ab0; }
+.post-card.bar-interview::before    { background: #b01878; }
+.post-card.bar-fault::before        { background: #b08018; }
+.post-card.bar-self::before         { background: #bbb; }
+
+/* Card header: badge + date */
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.card-badge {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+.badge-verification { background: #e4f4fa; color: #1578a0; }
+.badge-arch         { background: #fdf0e4; color: #b06018; }
+.badge-riscv        { background: #f0e4fd; color: #8818b0; }
+.badge-gem5         { background: #e8e4fd; color: #4418b0; }
+.badge-dl           { background: #e4fde8; color: #1aa030; }
+.badge-hdlbits      { background: #fde4e4; color: #b01818; }
+.badge-algo         { background: #e4eafd; color: #184ab0; }
+.badge-interview    { background: #fde4f0; color: #b01878; }
+.badge-fault        { background: #fdf4e4; color: #b08018; }
+.badge-self         { background: #f2f2f2; color: #888; }
+
+.card-date {
+  font-size: 11px;
+  color: #ccc;
+  letter-spacing: .2px;
+}
+.card-title {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.45;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.post-card:hover .card-title { color: #0085a1; }
+.card-excerpt {
+  font-size: 12px;
+  color: #bbb;
+  line-height: 1.65;
+  font-style: italic;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Pager */
+.home-pager {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 4px 0 20px;
+}
+.home-pager a {
+  font-size: 13px;
+  color: #666;
+  border: 1px solid #e0e0e0;
+  padding: 5px 14px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all .15s;
+}
+.home-pager a:hover { background: #333; color: #fff; border-color: #333; text-decoration: none; }
+.home-pager-info { font-size: 12px; color: #ccc; }
+</style>
+
+<div class="card-grid">
+{%- for post in paginator.posts -%}
+  {%- comment -%} Determine category from folder path {%- endcomment -%}
+  {%- assign pcat   = 'self' -%}
+  {%- assign plabel = '随想' -%}
+  {%- assign pbadge = 'badge-self' -%}
+  {%- if post.path contains '/verification/' -%}
+    {%- assign pcat='verification' -%}{%- assign plabel='芯片验证' -%}{%- assign pbadge='badge-verification' -%}
+  {%- elsif post.path contains '/risc-v/' or post.path contains '/riscv/' -%}
+    {%- assign pcat='riscv' -%}{%- assign plabel='RISC-V' -%}{%- assign pbadge='badge-riscv' -%}
+  {%- elsif post.path contains '/gem5/' -%}
+    {%- assign pcat='gem5' -%}{%- assign plabel='gem5' -%}{%- assign pbadge='badge-gem5' -%}
+  {%- elsif post.path contains '/fault_tolerant/' -%}
+    {%- assign pcat='fault' -%}{%- assign plabel='容错设计' -%}{%- assign pbadge='badge-fault' -%}
+  {%- elsif post.path contains '/arch/' -%}
+    {%- assign pcat='arch' -%}{%- assign plabel='体系结构' -%}{%- assign pbadge='badge-arch' -%}
+  {%- elsif post.path contains '/deep_learning/' -%}
+    {%- assign pcat='dl' -%}{%- assign plabel='深度学习' -%}{%- assign pbadge='badge-dl' -%}
+  {%- elsif post.path contains '/hdlbits/' -%}
+    {%- assign pcat='hdlbits' -%}{%- assign plabel='HDLbits' -%}{%- assign pbadge='badge-hdlbits' -%}
+  {%- elsif post.path contains '/arithmetic/' -%}
+    {%- assign pcat='algo' -%}{%- assign plabel='算法' -%}{%- assign pbadge='badge-algo' -%}
+  {%- elsif post.path contains '/interview/' -%}
+    {%- assign pcat='interview' -%}{%- assign plabel='面试系列' -%}{%- assign pbadge='badge-interview' -%}
+  {%- endif -%}
+
+  <a class="post-card bar-{{ pcat }}" href="{{ post.url | prepend: site.baseurl }}">
+    <div class="card-meta">
+      <span class="card-badge {{ pbadge }}">{{ plabel }}</span>
+      <span class="card-date">{{ post.date | date: "%Y年%-m月%-d日" }}</span>
+    </div>
+    <div class="card-title">{{ post.title }}</div>
+    <div class="card-excerpt">
+      {%- if post.lang == 'en' -%}
+        {{ post.content | strip_html | truncate: 120 }}
+      {%- else -%}
+        {{ post.content | strip_html | truncate: 80 }}
+      {%- endif -%}
+    </div>
+  </a>
+{%- endfor -%}
+</div>
+
 {% if paginator.total_pages > 1 %}
-<ul class="pager">
+<div class="home-pager">
+  <span>
     {% if paginator.previous_page %}
-    <li class="previous">
-        <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&larr; Newer Posts</a>
-    </li>
+    <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&larr; 新文章</a>
     {% endif %}
+  </span>
+  <span class="home-pager-info">第 {{ paginator.page }} / {{ paginator.total_pages }} 页</span>
+  <span>
     {% if paginator.next_page %}
-    <li class="next">
-        <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Older Posts &rarr;</a>
-    </li>
+    <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">旧文章 &rarr;</a>
     {% endif %}
-</ul>
+  </span>
+</div>
 {% endif %}

@@ -1,4 +1,4 @@
----
+﻿---
 layout: default
 ---
 
@@ -28,24 +28,204 @@ layout: default
 				{{ content }}
 
                 <hr style="visibility: hidden;">
-                <ul class="pager">
-                    {% if page.previous.url %}
-                    <li class="previous">
-                        <a href="{{ page.previous.url | prepend: site.baseurl | replace: '//', '/' }}" data-toggle="tooltip" data-placement="top" title="{{page.previous.title}}">
-                        Previous<br>
-                        <span>{{page.previous.title}}</span>
+
+                <style>
+                /* ===== 方案六 — 系列文章推荐 ===== */
+                .related-posts-box {
+                  margin: 0 0 22px;
+                  padding: 18px 20px;
+                  border: 1px solid #f0f0f0;
+                  border-radius: 8px;
+                  background: #fafafa;
+                }
+                .related-posts-title {
+                  font-size: 11px;
+                  font-weight: 700;
+                  color: #bbb;
+                  text-transform: uppercase;
+                  letter-spacing: 1.2px;
+                  margin-bottom: 12px;
+                }
+                .related-item {
+                  display: flex;
+                  align-items: baseline;
+                  gap: 10px;
+                  padding: 7px 0;
+                  border-bottom: 1px dashed #efefef;
+                  text-decoration: none;
+                  color: inherit;
+                }
+                .related-item:last-child { border-bottom: none; }
+                .related-item:hover .related-title { color: #0085a1; }
+                .related-date {
+                  flex-shrink: 0;
+                  font-size: 11px;
+                  color: #ccc;
+                  font-variant-numeric: tabular-nums;
+                }
+                .related-title {
+                  font-size: 13.5px;
+                  color: #444;
+                  transition: color .15s;
+                  line-height: 1.4;
+                }
+
+                /* ===== 方案二 — 上下篇导航 ===== */
+                .post-nav {
+                  display: flex;
+                  gap: 14px;
+                  margin: 0 0 24px;
+                }
+                .post-nav-item {
+                  flex: 0 1 calc(50% - 7px);
+                  border: 1px solid #efefef;
+                  border-radius: 8px;
+                  padding: 14px 16px;
+                  text-decoration: none;
+                  color: inherit;
+                  display: block;
+                  transition: box-shadow .18s, border-color .18s;
+                  overflow: hidden;
+                }
+                .post-nav-item:hover {
+                  box-shadow: 0 3px 14px rgba(0,0,0,.07);
+                  border-color: #ddd;
+                  text-decoration: none;
+                  color: inherit;
+                }
+                .post-nav-item.nav-next { text-align: right; margin-left: auto; }
+                .post-nav-dir {
+                  display: flex;
+                  align-items: center;
+                  gap: 5px;
+                  font-size: 11px;
+                  color: #bbb;
+                  margin-bottom: 7px;
+                }
+                .nav-next .post-nav-dir { justify-content: flex-end; }
+                .post-nav-badge {
+                  font-size: 10px;
+                  padding: 1px 6px;
+                  border-radius: 8px;
+                  font-weight: 600;
+                }
+                .badge-verification { background:#e4f4fa; color:#1578a0; }
+                .badge-arch         { background:#fdf0e4; color:#b06018; }
+                .badge-riscv        { background:#f0e4fd; color:#8818b0; }
+                .badge-gem5         { background:#e8e4fd; color:#4418b0; }
+                .badge-dl           { background:#e4fde8; color:#1aa030; }
+                .badge-hdlbits      { background:#fde4e4; color:#b01818; }
+                .badge-algo         { background:#e4eafd; color:#184ab0; }
+                .badge-interview    { background:#fde4f0; color:#b01878; }
+                .badge-fault        { background:#fdf4e4; color:#b08018; }
+                .badge-self         { background:#f2f2f2; color:#888; }
+                .post-nav-title {
+                  font-size: 13px;
+                  color: #333;
+                  line-height: 1.45;
+                  display: -webkit-box;
+                  -webkit-line-clamp: 2;
+                  -webkit-box-orient: vertical;
+                  overflow: hidden;
+                }
+                .post-nav-item:hover .post-nav-title { color: #0085a1; }
+                </style>
+
+                {%- comment -%}
+                  ===== 方案六：同系列文章推荐 =====
+                  通过 page.path 判断当前文章的目录，找出相同目录的其他最新 4 篇
+                {%- endcomment -%}
+                {%- assign _cf = '' -%}
+                {%- if page.path contains '/verification/' -%}{%- assign _cf = '/verification/' -%}
+                {%- elsif page.path contains '/risc-v/' -%}{%- assign _cf = '/risc-v/' -%}
+                {%- elsif page.path contains '/riscv/' -%}{%- assign _cf = '/riscv/' -%}
+                {%- elsif page.path contains '/gem5/' -%}{%- assign _cf = '/gem5/' -%}
+                {%- elsif page.path contains '/fault_tolerant/' -%}{%- assign _cf = '/fault_tolerant/' -%}
+                {%- elsif page.path contains '/arch/' -%}{%- assign _cf = '/arch/' -%}
+                {%- elsif page.path contains '/deep_learning/' -%}{%- assign _cf = '/deep_learning/' -%}
+                {%- elsif page.path contains '/hdlbits/' -%}{%- assign _cf = '/hdlbits/' -%}
+                {%- elsif page.path contains '/arithmetic/' -%}{%- assign _cf = '/arithmetic/' -%}
+                {%- elsif page.path contains '/interview/' -%}{%- assign _cf = '/interview/' -%}
+                {%- elsif page.path contains '/self/' -%}{%- assign _cf = '/self/' -%}
+                {%- endif -%}
+
+                {%- if _cf != '' -%}
+                  {%- assign _rc = 0 -%}
+                  {%- capture _related_html -%}
+                    {%- for rp in site.posts -%}
+                      {%- if _rc < 4 and rp.path contains _cf and rp.url != page.url -%}
+                        {%- assign _ry = rp.date | date: "%Y" -%}
+                        {%- assign _rm = rp.date | date: "%-m" -%}
+                        <a href="{{ rp.url | prepend: site.baseurl }}" class="related-item">
+                          <span class="related-date">{{ _ry }}年{{ _rm }}月</span>
+                          <span class="related-title">{{ rp.title }}</span>
                         </a>
-                    </li>
-                    {% endif %}
-                    {% if page.next.url %}
-                    <li class="next">
-                        <a href="{{ page.next.url | prepend: site.baseurl | replace: '//', '/' }}" data-toggle="tooltip" data-placement="top" title="{{page.next.title}}">
-                        Next<br>
-                        <span>{{page.next.title}}</span>
-                        </a>
-                    </li>
-                    {% endif %}
-                </ul>
+                        {%- assign _rc = _rc | plus: 1 -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                  {%- endcapture -%}
+                  {%- unless _related_html == blank -%}
+                  <div class="related-posts-box">
+                    <div class="related-posts-title">系列内其他文章</div>
+                    <div class="related-posts-list">{{ _related_html }}</div>
+                  </div>
+                  {%- endunless -%}
+                {%- endif -%}
+
+                {%- comment -%}
+                  ===== 方案二：上下篇导航升级 =====
+                  为 prev/next 各判断一次分类标签
+                {%- endcomment -%}
+
+                {%- comment -%} 判断上一篇分类 {%- endcomment -%}
+                {%- assign _pl = '随想' -%}{%- assign _pb = 'badge-self' -%}
+                {%- if page.previous.path contains '/verification/' -%}{%- assign _pl = '芯片验证' -%}{%- assign _pb = 'badge-verification' -%}
+                {%- elsif page.previous.path contains '/risc-v/' or page.previous.path contains '/riscv/' -%}{%- assign _pl = 'RISC-V' -%}{%- assign _pb = 'badge-riscv' -%}
+                {%- elsif page.previous.path contains '/gem5/' -%}{%- assign _pl = 'gem5' -%}{%- assign _pb = 'badge-gem5' -%}
+                {%- elsif page.previous.path contains '/fault_tolerant/' -%}{%- assign _pl = '容错设计' -%}{%- assign _pb = 'badge-fault' -%}
+                {%- elsif page.previous.path contains '/arch/' -%}{%- assign _pl = '体系结构' -%}{%- assign _pb = 'badge-arch' -%}
+                {%- elsif page.previous.path contains '/deep_learning/' -%}{%- assign _pl = '深度学习' -%}{%- assign _pb = 'badge-dl' -%}
+                {%- elsif page.previous.path contains '/hdlbits/' -%}{%- assign _pl = 'HDLbits' -%}{%- assign _pb = 'badge-hdlbits' -%}
+                {%- elsif page.previous.path contains '/arithmetic/' -%}{%- assign _pl = '算法' -%}{%- assign _pb = 'badge-algo' -%}
+                {%- elsif page.previous.path contains '/interview/' -%}{%- assign _pl = '面试系列' -%}{%- assign _pb = 'badge-interview' -%}
+                {%- endif -%}
+
+                {%- comment -%} 判断下一篇分类 {%- endcomment -%}
+                {%- assign _nl = '随想' -%}{%- assign _nb = 'badge-self' -%}
+                {%- if page.next.path contains '/verification/' -%}{%- assign _nl = '芯片验证' -%}{%- assign _nb = 'badge-verification' -%}
+                {%- elsif page.next.path contains '/risc-v/' or page.next.path contains '/riscv/' -%}{%- assign _nl = 'RISC-V' -%}{%- assign _nb = 'badge-riscv' -%}
+                {%- elsif page.next.path contains '/gem5/' -%}{%- assign _nl = 'gem5' -%}{%- assign _nb = 'badge-gem5' -%}
+                {%- elsif page.next.path contains '/fault_tolerant/' -%}{%- assign _nl = '容错设计' -%}{%- assign _nb = 'badge-fault' -%}
+                {%- elsif page.next.path contains '/arch/' -%}{%- assign _nl = '体系结构' -%}{%- assign _nb = 'badge-arch' -%}
+                {%- elsif page.next.path contains '/deep_learning/' -%}{%- assign _nl = '深度学习' -%}{%- assign _nb = 'badge-dl' -%}
+                {%- elsif page.next.path contains '/hdlbits/' -%}{%- assign _nl = 'HDLbits' -%}{%- assign _nb = 'badge-hdlbits' -%}
+                {%- elsif page.next.path contains '/arithmetic/' -%}{%- assign _nl = '算法' -%}{%- assign _nb = 'badge-algo' -%}
+                {%- elsif page.next.path contains '/interview/' -%}{%- assign _nl = '面试系列' -%}{%- assign _nb = 'badge-interview' -%}
+                {%- endif -%}
+
+                <div class="post-nav">
+                  {%- if page.previous.url -%}
+                  <a class="post-nav-item nav-prev"
+                     href="{{ page.previous.url | prepend: site.baseurl | replace: '//', '/' }}">
+                    <div class="post-nav-dir">
+                      <span>&larr; 上一篇</span>
+                      <span class="post-nav-badge {{ _pb }}">{{ _pl }}</span>
+                    </div>
+                    <div class="post-nav-title">{{ page.previous.title }}</div>
+                  </a>
+                  {%- endif -%}
+                  {%- if page.next.url -%}
+                  <a class="post-nav-item nav-next"
+                     href="{{ page.next.url | prepend: site.baseurl | replace: '//', '/' }}">
+                    <div class="post-nav-dir">
+                      <span class="post-nav-badge {{ _nb }}">{{ _nl }}</span>
+                      <span>下一篇 &rarr;</span>
+                    </div>
+                    <div class="post-nav-title">{{ page.next.title }}</div>
+                  </a>
+                  {%- endif -%}
+                </div>
+
                 <hr style="visibility: hidden;">
 
                 {% if site.disqus_username %}

@@ -9,6 +9,88 @@ layout: default
 <!-- Post Header -->
 {% include intro-header.html type='post' %}
 
+<!-- Post Typography: 方案二（标题层级）、方案五（引用块）、方案六（行内代码） -->
+<style>
+/* ===== 方案二：标题层级重塑 ===== */
+
+/* H2 — 去掉原来的浅灰假分割线，改为左侧蓝色竖条 */
+article .post-container h2::before {
+  display: none;
+}
+article .post-container h2 {
+  border-left: 4px solid #0085a1;
+  padding-left: 14px;
+  margin: 48px 0 18px;
+  line-height: 1.3;
+  color: #222;
+}
+
+/* H3 — 文字加深，加底部浅线 */
+article .post-container h3 {
+  color: #333;
+  padding-bottom: 5px;
+  border-bottom: 1.5px solid #e8e8e8;
+  margin: 36px 0 14px;
+}
+
+/* H4 — 从灰色恢复深色，前加蓝色小方块标记 */
+article .post-container h4 {
+  color: #444;
+  font-size: 17px;
+  font-weight: 700;
+  margin: 28px 0 10px;
+}
+article .post-container h4::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #0085a1;
+  border-radius: 2px;
+  margin-right: 8px;
+  vertical-align: middle;
+  margin-bottom: 2px;
+}
+
+/* H5 / H6 — 从灰色恢复，缩小字号 */
+article .post-container h5,
+article .post-container h6 {
+  color: #555;
+  font-size: 15px;
+  font-weight: 600;
+  margin: 22px 0 8px;
+}
+
+/* ===== 方案五：引用块（blockquote）升级 ===== */
+article .post-container blockquote {
+  border-left: 4px solid #0085a1;
+  background: #f0f8fb;
+  color: #555;
+  font-style: normal;        /* 中文不适合斜体 */
+  padding: 12px 20px;
+  margin: 20px 0;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.95em;
+}
+article .post-container blockquote p {
+  margin: 6px 0;
+}
+article .post-container blockquote p:first-child { margin-top: 0; }
+article .post-container blockquote p:last-child  { margin-bottom: 0; }
+
+/* ===== 方案六：行内代码（inline code）美化 ===== */
+/* :not(pre) > code 精准选中行内 code，不影响代码块 */
+article .post-container :not(pre) > code {
+  background: #f5f0ff;
+  color: #b01878;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.875em;
+  font-family: "Fira Code", Menlo, Monaco, Consolas, "Courier New", monospace;
+  word-break: break-word;
+}
+</style>
+
 <!-- Post Content -->
 <article>
     <div class="container">

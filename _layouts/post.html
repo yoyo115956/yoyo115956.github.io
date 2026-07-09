@@ -89,6 +89,65 @@ article .post-container :not(pre) > code {
   font-family: "Fira Code", Menlo, Monaco, Consolas, "Courier New", monospace;
   word-break: break-word;
 }
+
+/* ===== 方案四：表格美化 ===== */
+article .post-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  border: 1px solid #dde3ea;
+  border-radius: 6px;
+  overflow: hidden;
+  font-size: 0.93em;
+}
+article .post-container table thead th {
+  background: #2d3748;
+  color: #f0f4f8;
+  padding: 10px 16px;
+  font-weight: 600;
+  text-align: left;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+article .post-container table tbody td {
+  padding: 8px 16px;
+  border-top: 1px solid #eaedf0;
+  vertical-align: middle;
+}
+article .post-container table tbody tr:nth-child(even) {
+  background: #f6f9fc;
+}
+/* article .post-container table tbody tr:hover {
+  background: #e4f2f7;
+  transition: background .15s;
+} */
+
+/* ===== 方案三：代码块语言标签 + 最大高度 ===== */
+/* 语言标签通过 JS 写入 data-lang，用 ::before 显示 */
+.post-container .highlighter-rouge {
+  position: relative;
+}
+.post-container .highlighter-rouge[data-lang]::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(0, 133, 161, 0.82);
+  color: #fff;
+  font-size: 11px;
+  padding: 2px 10px 3px;
+  border-radius: 6px 0 4px 0;
+  font-family: "Fira Code", Menlo, Monaco, Consolas, monospace;
+  text-transform: lowercase;
+  letter-spacing: 0.05em;
+  z-index: 3;
+  pointer-events: none;
+}
+/* 超长代码块加滚动条，避免撑破布局 */
+/* .post-container .highlighter-rouge .highlight pre {
+  max-height: 520px;
+  overflow-y: auto;
+} */
 </style>
 
 <!-- Post Content -->
@@ -580,5 +639,37 @@ article .post-container :not(pre) > code {
   } else {
     setTimeout(initCatalogHighlight, 400);
   }
+})();
+</script>
+
+<!-- ===== 方案三：代码块语言标签（JS 写入 data-lang） ===== -->
+<script>
+(function() {
+  var langMap = {
+    'js': 'JavaScript', 'javascript': 'JavaScript',
+    'ts': 'TypeScript', 'typescript': 'TypeScript',
+    'py': 'Python',     'python': 'Python',
+    'rb': 'Ruby',       'ruby': 'Ruby',
+    'sh': 'Shell',      'bash': 'Shell', 'zsh': 'Shell',
+    'c': 'C',           'cpp': 'C++', 'c++': 'C++',
+    'java': 'Java',     'kotlin': 'Kotlin',
+    'go': 'Go',         'rust': 'Rust',
+    'sv': 'SystemVerilog', 'systemverilog': 'SystemVerilog',
+    'v': 'Verilog',     'verilog': 'Verilog',
+    'html': 'HTML',     'css': 'CSS',   'scss': 'SCSS',
+    'json': 'JSON',     'yaml': 'YAML', 'yml': 'YAML',
+    'xml': 'XML',       'sql': 'SQL',   'md': 'Markdown',
+    'makefile': 'Makefile', 'dockerfile': 'Dockerfile',
+    'tcl': 'Tcl',       'perl': 'Perl',
+  };
+  document.querySelectorAll('.post-container .highlighter-rouge').forEach(function(el) {
+    var cls = Array.from(el.classList).join(' ');
+    var m = cls.match(/\blanguage-([\w+.-]+)\b/);
+    if (!m) return;
+    var raw = m[1].toLowerCase();
+    if (raw === 'plaintext' || raw === 'text' || raw === 'nohighlight') return;
+    var label = langMap[raw] || m[1];
+    el.setAttribute('data-lang', label);
+  });
 })();
 </script>

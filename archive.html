@@ -5,83 +5,233 @@ description: "「我干了什么 究竟拿了时间换了什么」"
 header-img: "img/bg-little-universe.jpg"
 ---
 
-<!--
-Credits: this page shamelessly borrowed a lot from:
-https://github.com/kitian616/jekyll-TeXt-theme
--->
-<!-- Page Header -->
 {% include intro-header.html type='page' short=true %}
 
-<!-- Main Content -->
+<style>
+/* ===== Archive Page — Redesign ===== */
+.archive-wrapper { padding: 20px 0 60px; }
+
+/* --- Category Filter Tabs --- */
+.cat-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 32px;
+}
+.cat-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 14px;
+  border: 1.5px solid #d8d8d8;
+  border-radius: 20px;
+  font-size: 13px;
+  color: #666;
+  background: #fff;
+  cursor: pointer;
+  transition: all .18s ease;
+  user-select: none;
+}
+.cat-tab .cat-num {
+  font-size: 11px;
+  color: #bbb;
+  background: #f2f2f2;
+  padding: 1px 6px;
+  border-radius: 8px;
+  transition: all .18s ease;
+}
+.cat-tab:hover { border-color: #888; color: #333; }
+.cat-tab.active { background: #333; border-color: #333; color: #fff; }
+.cat-tab.active .cat-num { background: rgba(255,255,255,.18); color: #eee; }
+
+/* --- Year Group --- */
+.yr-group { margin-top: 36px; }
+.yr-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #efefef;
+  margin-bottom: 2px;
+}
+.yr-num  { font-size: 22px; font-weight: 700; color: #222; }
+.yr-cnt  { font-size: 12px; color: #bbb; }
+
+/* --- Post Row --- */
+.post-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 4px;
+  border-bottom: 1px solid #f4f4f4;
+  transition: background .12s;
+}
+.post-row:last-child { border-bottom: none; }
+.post-row:hover { background: #fafafa; border-radius: 4px; }
+.post-date {
+  flex-shrink: 0;
+  width: 46px;
+  font-size: 12px;
+  color: #ccc;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .5px;
+}
+.post-badge {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+.post-link {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.5;
+  flex: 1;
+}
+.post-link:hover { color: #0085a1; text-decoration: none; }
+
+/* Badge colors */
+.badge-verification { background: #e4f4fa; color: #1578a0; }
+.badge-arch         { background: #fdf0e4; color: #b06018; }
+.badge-riscv        { background: #f0e4fd; color: #8818b0; }
+.badge-gem5         { background: #e8e4fd; color: #4418b0; }
+.badge-dl           { background: #e4fde8; color: #1aa030; }
+.badge-hdlbits      { background: #fde4e4; color: #b01818; }
+.badge-algo         { background: #e4eafd; color: #184ab0; }
+.badge-interview    { background: #fde4f0; color: #b01878; }
+.badge-fault        { background: #fdf4e4; color: #b08018; }
+.badge-self         { background: #f2f2f2; color: #888; }
+
+.post-row.js-hide { display: none; }
+.yr-group.js-hide { display: none; }
+
+@media (max-width: 767px) {
+  .post-date  { display: none; }
+  .post-badge { font-size: 10px; padding: 2px 6px; }
+  .post-link  { font-size: 13px; }
+}
+</style>
+
 <div class="container">
-	<div class="row">
-		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-			<!-- Tags (as filter) -->
-			<div id='tag_cloud' class="tags tags-sup js-tags">
-				<a class="tag-button--all" data-encode="">
-					Show All
-					<sup>{{site.posts.size}}</sup>
-				</a>
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <div class="archive-wrapper">
 
-				{% capture tags %}
-				{% for tag in site.tags %}
-				<a data-sort="{{ site.posts.size | minus: tag[1].size | prepend: '0000' | slice: -4, 4 }}"
-					data-encode="{{ tag[0] | strip | url_encode }}" class="tag-button" title="{{ tag[0] }}"
-					rel="{{ tag[1].size }}">
-					{{ tag[0] }}
-					<sup>{{tag[1].size}}</sup>
-				</a>__SEPERATOR__
-				{% endfor %}
-				{% endcapture %}
-				{{ tags | split:'__SEPERATOR__' | sort }}
-			</div>
+        <!-- Category Filter Tabs -->
+        <div class="cat-tabs" id="catTabs">
+          <span class="cat-tab active" data-cat="all">全部 <span class="cat-num">{{ site.posts.size }}</span></span>
+          <span class="cat-tab" data-cat="verification">芯片验证 <span class="cat-num">0</span></span>
+          <span class="cat-tab" data-cat="arch">体系结构 <span class="cat-num">0</span></span>
+          <span class="cat-tab" data-cat="riscv">RISC-V <span class="cat-num">0</span></span>
+          <span class="cat-tab" data-cat="gem5">gem5 <span class="cat-num">0</span></span>
+          <span class="cat-tab" data-cat="fault">容错设计 <span class="cat-num">0</span></span>
+          <span class="cat-tab" data-cat="dl">深度学习 <span class="cat-num">0</span></span>
+          <span class="cat-tab" data-cat="hdlbits">HDLbits <span class="cat-num">0</span></span>
+          <span class="cat-tab" data-cat="algo">算法 <span class="cat-num">0</span></span>
+          <span class="cat-tab" data-cat="interview">面试系列 <span class="cat-num">0</span></span>
+          <span class="cat-tab" data-cat="self">随想 <span class="cat-num">0</span></span>
+        </div>
 
-			<!-- Article List -->
-			<div class="mini-post-list js-result d-none">
-				{%- assign _sorted_list = site.posts -%}
-				{%- assign _sorted_list = _sorted_list | sort: 'date' -%}
-				{%- assign _sorted_list = _sorted_list | reverse -%}
+        <!-- Post list grouped by year (category determined from folder path) -->
+        {%- assign sorted_posts = site.posts | sort: 'date' | reverse -%}
+        {%- assign cur_year = '' -%}
 
+        {%- for post in sorted_posts -%}
+          {%- assign yr = post.date | date: '%Y' -%}
+          {%- assign md = post.date | date: '%m/%d' -%}
 
-				{%- for _article in _sorted_list -%}
-				{%- assign _tags = '' -%}
-				{%- for _tag in _article.tags -%}
-				{%- assign _tag_encode = _tag | strip | url_encode -%}
-				{%- if forloop.last -%}
-				{%- assign _tags = _tags | append: _tag_encode -%}
-				{%- else -%}
-				{%- assign _tags = _tags | append: _tag_encode | append: ',' -%}
-				{%- endif -%}
-				{%- endfor -%}
+          {%- comment -%} Determine category from folder path {%- endcomment -%}
+          {%- assign pcat   = 'self' -%}
+          {%- assign plabel = '随想' -%}
+          {%- assign pbadge = 'badge-self' -%}
+          {%- if post.path contains '/verification/' -%}
+            {%- assign pcat = 'verification' -%}{%- assign plabel = '芯片验证' -%}{%- assign pbadge = 'badge-verification' -%}
+          {%- elsif post.path contains '/risc-v/' or post.path contains '/riscv/' -%}
+            {%- assign pcat = 'riscv' -%}{%- assign plabel = 'RISC-V' -%}{%- assign pbadge = 'badge-riscv' -%}
+          {%- elsif post.path contains '/gem5/' -%}
+            {%- assign pcat = 'gem5' -%}{%- assign plabel = 'gem5' -%}{%- assign pbadge = 'badge-gem5' -%}
+          {%- elsif post.path contains '/fault_tolerant/' -%}
+            {%- assign pcat = 'fault' -%}{%- assign plabel = '容错设计' -%}{%- assign pbadge = 'badge-fault' -%}
+          {%- elsif post.path contains '/arch/' -%}
+            {%- assign pcat = 'arch' -%}{%- assign plabel = '体系结构' -%}{%- assign pbadge = 'badge-arch' -%}
+          {%- elsif post.path contains '/deep_learning/' -%}
+            {%- assign pcat = 'dl' -%}{%- assign plabel = '深度学习' -%}{%- assign pbadge = 'badge-dl' -%}
+          {%- elsif post.path contains '/hdlbits/' -%}
+            {%- assign pcat = 'hdlbits' -%}{%- assign plabel = 'HDLbits' -%}{%- assign pbadge = 'badge-hdlbits' -%}
+          {%- elsif post.path contains '/arithmetic/' -%}
+            {%- assign pcat = 'algo' -%}{%- assign plabel = '算法' -%}{%- assign pbadge = 'badge-algo' -%}
+          {%- elsif post.path contains '/interview/' -%}
+            {%- assign pcat = 'interview' -%}{%- assign plabel = '面试系列' -%}{%- assign pbadge = 'badge-interview' -%}
+          {%- elsif post.path contains '/self/' -%}
+            {%- assign pcat = 'self' -%}{%- assign plabel = '随想' -%}{%- assign pbadge = 'badge-self' -%}
+          {%- endif -%}
 
-				{% comment %} group by year {% endcomment %}
-				{%- assign _currentdate = _article.date | date: '%Y' -%}
-				{%- if _currentdate != _date -%}
-				{%- unless forloop.first -%}</section>{%- endunless -%}
-				<section>
-					<span class="fa listing-seperator">
-						<span class="tag-text">{{ _currentdate }}</span>
-					</span>
-					{%- assign _date = _currentdate -%}
-					{%- endif -%}
+          {%- if yr != cur_year -%}
+            {%- unless cur_year == '' -%}</div></div>{%- endunless -%}
+            <div class="yr-group" data-year="{{ yr }}">
+              <div class="yr-header">
+                <span class="yr-num">{{ yr }}</span>
+                <span class="yr-cnt" id="yc-{{ yr }}"></span>
+              </div>
+              <div class="yr-posts">
+            {%- assign cur_year = yr -%}
+          {%- endif -%}
 
-					<div class="post-preview item" data-tags="{{ _tags }}">
-						<a href="{{ _article.url | prepend: site.baseurl }}">
-							<h2 class="post-title">
-								{{ _article.title }}
-							</h2>
-							{% if _article.subtitle %}
-							<h3 class="post-subtitle">
-								{{ _article.subtitle }}
-							</h3>
-							{% endif %}
-						</a>
-						<hr>
-					</div>
-					{%- if forloop.last -%}
-				</section>{%- endif -%}
-				{% endfor %}
-			</div>
-		</div>
-	</div>
+          <div class="post-row" data-cat="{{ pcat }}">
+            <span class="post-date">{{ md }}</span>
+            <span class="post-badge {{ pbadge }}">{{ plabel }}</span>
+            <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+          </div>
+
+          {%- if forloop.last -%}</div></div>{%- endif -%}
+        {%- endfor -%}
+
+      </div>
+    </div>
+  </div>
 </div>
+
+<script>
+(function () {
+  var rows = [].slice.call(document.querySelectorAll('.post-row'));
+  var yrs  = [].slice.call(document.querySelectorAll('.yr-group'));
+  var tabs = [].slice.call(document.querySelectorAll('.cat-tab'));
+
+  // Count per category
+  var cnt = {};
+  rows.forEach(function (r) {
+    var c = r.dataset.cat;
+    cnt[c] = (cnt[c] || 0) + 1;
+  });
+
+  // Fill count badges (skip "全部", already rendered by Jekyll)
+  tabs.forEach(function (t) {
+    if (t.dataset.cat !== 'all') {
+      t.querySelector('.cat-num').textContent = cnt[t.dataset.cat] || 0;
+    }
+  });
+
+  function applyFilter(cat) {
+    rows.forEach(function (r) {
+      r.classList.toggle('js-hide', cat !== 'all' && r.dataset.cat !== cat);
+    });
+    // Update year counts & hide empty year sections
+    yrs.forEach(function (yr) {
+      var vis = yr.querySelectorAll('.post-row:not(.js-hide)').length;
+      var el  = document.getElementById('yc-' + yr.dataset.year);
+      if (el) el.textContent = vis + ' 篇';
+      yr.classList.toggle('js-hide', vis === 0);
+    });
+    // Toggle active tab
+    tabs.forEach(function (t) { t.classList.toggle('active', t.dataset.cat === cat); });
+  }
+
+  applyFilter('all'); // initialise year counts on load
+
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () { applyFilter(this.dataset.cat); });
+  });
+})();
+</script>

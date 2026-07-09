@@ -4,7 +4,7 @@ SEOTitle: 李泳霆的博客 | LiYongTing Blog
 header-img: img/home-bg.jpg
 email: 1159561962@qq.com
 description: "这里是 @李泳霆 的个人博客，与你一起发现更大的世界 | 要做一个有 swag 的程序员"
-keyword: "黄玄, Hux黄玄, Hux, 鬼栈, huxpro, @huxpro, 黄玄的博客, Hux Blog, 博客, 个人网站, 互联网, Web, JavaScript, React, React Native, 前端, 设计"
+keyword: "李泳霆, LiYongTing, yoyo115956, 李泳霆的博客, LiYongTing Blog, 博客, 个人网站, 芯片验证, UVM, SystemVerilog, RISC-V, gem5, 计算机体系结构, 深度学习, 容错设计, 清华大学, 海光信息"
 url: "" # your host, for absolute URL
 baseurl: "" # for example, '/blog' if your blog hosted on 'host/blog'
 
@@ -16,12 +16,11 @@ future: true
 
 # SNS settings
 RSS: false
-weibo_username: huxpro
-zhihu_username: huxpro
-github_username: huxpro
-twitter_username: huxpro
-#facebook_username:  huxpro
-#linkedin_username:  firstname-lastname-idxxxx
+github_username: yoyo115956
+#weibo_username:    your-weibo
+#zhihu_username:    your-zhihu
+#twitter_username:  your-twitter
+#linkedin_username: your-linkedin
 
 # Build settings
 # from 2016, 'pygments' is unsupported on GitHub Pages. Use 'rouge' for highlighting instead.
@@ -62,7 +61,7 @@ kramdown:
       start_line: 1
 
 # Disqus settings
-disqus_username: hux
+# disqus_username: your-disqus  # 如需评论系统，填写你的 Disqus 用户名
 
 # Netease settings
 netease_comment: false
@@ -72,13 +71,13 @@ netease_comment: false
 # ba_track_id: [your track id]
 
 # Google Analytics
-ga_track_id: "UA-49627206-1" # Format: UA-xxxxxx-xx
-ga_domain: huangxuan.me
+# ga_track_id: "G-XXXXXXXXXX" # 填写你自己的 GA4 测量 ID
+# ga_domain: yoyo115956.github.io
 
 # Sidebar settings
 sidebar: true # whether or not using Sidebar.
-sidebar-about-description: "要做一个有 swag 的程序员 <br> React Team @ Meta"
-sidebar-avatar: https://github.com/Huxpro.png # use absolute URL, seeing it's used in both `/` and `/about/`
+sidebar-about-description: "清华大学 计算机体系结构 | 芯片验证工程师 @ 海光信息"
+sidebar-avatar: https://github.com/yoyo115956.png # use absolute URL, seeing it's used in both `/` and `/about/`
 
 # Featured Tags
 featured-tags: true # whether or not using Feature-Tags
@@ -91,15 +90,5 @@ service-worker: true
 # MathJax rendering for layout:page (e.g. post preview)
 page-mathjax: false
 
-# Friends
-friends:
-  [
-    { title: "乱序（Midare）", href: "http://mida.re/" },
-    { title: "Ebn Zhang", href: "https://ebnbin.dev/" },
-    { title: "Kun Qian", href: "http://kunq.me" },
-    { title: "Sherry Woo", href: "https://sherrywoo.me/" },
-    { title: "SmdCn", href: "http://blog.smdcn.net" },
-    { title: "JiyinYiyong", href: "http://tiye.me/" },
-    { title: "DHong Say", href: "http://dhong.co" },
-    { title: "尹峰以为", href: "http://ingf.github.io/" },
-  ]
+# Friends（填写你自己的友链）
+friends: []

@@ -73,7 +73,7 @@ layout: default
                 <div class="side-catalog">
                     <hr class="hidden-sm hidden-xs">
                     <h5>
-                        <a class="catalog-toggle" href="#">CATALOG</a>
+                        <a class="catalog-toggle" href="#">目录</a>
                     </h5>
                     <ul class="catalog-body"></ul>
                 </div>
@@ -171,3 +171,152 @@ layout: default
     }
 </style>
 {% endif %}
+
+<!-- ===== 方案四：阅读进度条 ===== -->
+<style>
+#read-progress {
+  position: fixed;
+  top: 0; left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0085a1, #00bcd4);
+  z-index: 9999;
+  transition: width .1s linear;
+  border-radius: 0 2px 2px 0;
+}
+</style>
+<div id="read-progress"></div>
+<script>
+(function() {
+  var bar = document.getElementById('read-progress');
+  function updateBar() {
+    var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    var scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    var pct = scrollHeight > 0 ? (scrollTop / scrollHeight * 100) : 0;
+    bar.style.width = pct + '%';
+  }
+  window.addEventListener('scroll', updateBar, { passive: true });
+  updateBar();
+})();
+</script>
+
+<!-- ===== 方案三：代码块一键复制 ===== -->
+<style>
+.code-copy-wrap {
+  position: relative;
+}
+.code-copy-btn {
+  position: absolute;
+  top: 8px; right: 8px;
+  padding: 3px 10px;
+  font-size: 11px;
+  color: #aaa;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .15s, color .15s;
+  user-select: none;
+  line-height: 1.6;
+}
+.code-copy-wrap:hover .code-copy-btn { opacity: 1; }
+.code-copy-btn:hover { color: #fff; background: rgba(255,255,255,.18); }
+.code-copy-btn.copied { color: #4caf50; border-color: #4caf50; opacity: 1; }
+</style>
+<script>
+(function() {
+  document.querySelectorAll('.post-container pre').forEach(function(pre) {
+    var wrap = document.createElement('div');
+    wrap.className = 'code-copy-wrap';
+    pre.parentNode.insertBefore(wrap, pre);
+    wrap.appendChild(pre);
+    var btn = document.createElement('button');
+    btn.className = 'code-copy-btn';
+    btn.textContent = '复制';
+    wrap.appendChild(btn);
+    btn.addEventListener('click', function() {
+      var code = pre.querySelector('code') ? pre.querySelector('code').innerText : pre.innerText;
+      navigator.clipboard.writeText(code).then(function() {
+        btn.textContent = '✓ 已复制';
+        btn.classList.add('copied');
+        setTimeout(function() {
+          btn.textContent = '复制';
+          btn.classList.remove('copied');
+        }, 2000);
+      }).catch(function() {
+        // fallback for older browsers
+        var ta = document.createElement('textarea');
+        ta.value = code;
+        ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        btn.textContent = '✓ 已复制';
+        btn.classList.add('copied');
+        setTimeout(function() {
+          btn.textContent = '复制';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    });
+  });
+})();
+</script>
+
+<!-- ===== 方案五：目录滚动高亮 ===== -->
+<style>
+.catalog-body .active > a {
+  color: #0085a1 !important;
+  font-weight: 600;
+}
+.catalog-body li a {
+  transition: color .15s;
+}
+</style>
+<script>
+(function() {
+  function initCatalogHighlight() {
+    var items = document.querySelectorAll('.catalog-body li');
+    if (!items.length) return;
+    // collect headings in order
+    var headings = [];
+    items.forEach(function(li) {
+      var a = li.querySelector('a');
+      if (!a) return;
+      var href = a.getAttribute('href');
+      if (!href || href === '#') return;
+      var id = href.replace(/^#/, '');
+      var el = document.getElementById(id);
+      if (el) headings.push({ li: li, el: el });
+    });
+    if (!headings.length) return;
+
+    function onScroll() {
+      var scrollY = window.scrollY || window.pageYOffset;
+      var offset = 80; // navbar height
+      var active = headings[0];
+      for (var i = 0; i < headings.length; i++) {
+        if (headings[i].el.getBoundingClientRect().top + scrollY - offset <= scrollY) {
+          active = headings[i];
+        }
+      }
+      items.forEach(function(li) { li.classList.remove('active'); });
+      if (active) active.li.classList.add('active');
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  // catalog is built by hux-blog.js after DOM ready; wait a tick
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(initCatalogHighlight, 400);
+    });
+  } else {
+    setTimeout(initCatalogHighlight, 400);
+  }
+})();
+</script>

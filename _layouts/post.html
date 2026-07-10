@@ -596,6 +596,50 @@ article .post-container table tbody tr:nth-child(even) {
   transition: color .15s;
 }
 </style>
+<!-- ===== 目录生成：按标题等级构建目录（h1-h6） ===== -->
+<script>
+(function buildCatalog(){
+  var catalog = document.querySelector('.catalog-body');
+  var container = document.querySelector('.post-container');
+  if (!catalog || !container) return;
+  // clear existing
+  catalog.innerHTML = '';
+  var headings = container.querySelectorAll('h1,h2,h3,h4,h5,h6');
+  if (!headings.length) return;
+
+  function slugify(text) {
+    return text.toString().toLowerCase().trim()
+      .replace(/\s+/g, '-')           // Replace spaces with -
+      .replace(/[^\w\-\u4e00-\u9fa5]+/g, '') // Remove invalid chars but keep CJK
+      .replace(/\-+/g, '-')           // Collapse dashes
+      .replace(/^-+|-+$/g, '');        // Trim dashes
+  }
+
+  headings.forEach(function(h){
+    // skip headings inside elements that explicitly opt-out
+    if (h.closest && h.closest('.no-catalog')) return;
+    var level = parseInt(h.tagName.substring(1), 10);
+    var id = h.id || slugify(h.textContent) || ('heading-' + Math.random().toString(36).slice(2,8));
+    h.id = id;
+
+    var li = document.createElement('li');
+    li.className = 'h' + level + '_nav';
+    var a = document.createElement('a');
+    a.href = '#' + id;
+    a.textContent = h.textContent.replace(/\s+/g,' ').trim();
+    li.appendChild(a);
+    catalog.appendChild(li);
+  });
+
+  // add small CSS overrides for consistent indentation (in case compiled CSS differs)
+  var styleId = 'catalog-indent-overrides';
+  if (!document.getElementById(styleId)) {
+    var s = document.createElement('style'); s.id = styleId;
+    s.innerHTML = '\n.catalog-body li.h1_nav a{padding-left:6px}\n.catalog-body li.h2_nav a{padding-left:12px}\n.catalog-body li.h3_nav a{padding-left:20px}\n.catalog-body li.h4_nav a{padding-left:28px}\n.catalog-body li.h5_nav a{padding-left:36px}\n.catalog-body li.h6_nav a{padding-left:44px}\n.catalog-body li a{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}\n';
+    document.head.appendChild(s);
+  }
+})();
+</script>
 <script>
 (function() {
   function initCatalogHighlight() {
